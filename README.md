@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Disaster Resource Connector 🆘
 
 An AI-powered agent that helps people find essential resources during disaster situations, including shelter, food, medical aid, and government assistance.
@@ -197,3 +198,17 @@ For issues or questions:
 ---
 
 **Built with ❤️ for disaster relief assistance**
+=======
+---
+title: Disaster Resource Connector
+emoji: 🌖
+colorFrom: gray
+colorTo: pink
+sdk: gradio
+sdk_version: 6.0.2
+app_file: app.py
+pinned: false
+---
+
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+>>>>>>> 6ec802608ae2cdb53393a9643eaeebb2b59f6a7a
