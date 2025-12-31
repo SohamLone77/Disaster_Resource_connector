@@ -7,10 +7,10 @@ class Planner:
         self.logger = logging.getLogger(__name__)
         self.context_engine = ContextEngine()
         
-    def create_plan(self, user_input: str, session_id: str) -> dict:
+    def create_plan(self, user_input: str, session_id: str, user_lat: float = None, user_lon: float = None) -> dict:
         self.logger.info(f"Planner creating plan for session {session_id}")
         
-        context = self.context_engine.analyze_context(user_input, session_id)
+        context = self.context_engine.analyze_context(user_input, session_id, user_lat, user_lon)
         
         plan = {
             "session_id": session_id,
@@ -18,6 +18,7 @@ class Planner:
             "resource_types": self._identify_resource_types(user_input),
             "priority": self._determine_priority(user_input),
             "location_constraints": context.get("location", {}),
+            "user_coordinates": {"lat": user_lat, "lon": user_lon},
             "timestamp": context.get("timestamp")
         }
         

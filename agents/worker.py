@@ -23,6 +23,13 @@ class Worker:
     
     def _find_shelters(self, plan: dict) -> dict:
         location = plan.get('location_constraints', {})
+        # Add urgency to location context for filtering
+        location['urgency'] = plan.get('priority', 'medium')
+        
+        # Check if user mentioned pets in their input
+        user_input = plan.get('user_input', '').lower()
+        location['needs_pets'] = any(word in user_input for word in ['pet', 'dog', 'cat', 'animal'])
+        
         return {
             "resource_type": "shelter",
             "results": self.tools.find_nearby_shelters(location),
@@ -32,6 +39,8 @@ class Worker:
     
     def _find_food_distribution(self, plan: dict) -> dict:
         location = plan.get('location_constraints', {})
+        location['urgency'] = plan.get('priority', 'medium')
+        
         return {
             "resource_type": "food",
             "results": self.tools.find_food_distribution_points(location),
@@ -41,6 +50,8 @@ class Worker:
     
     def _find_medical_aid(self, plan: dict) -> dict:
         location = plan.get('location_constraints', {})
+        location['urgency'] = plan.get('priority', 'medium')
+        
         return {
             "resource_type": "medical",
             "results": self.tools.find_medical_aid_stations(location),
@@ -49,9 +60,25 @@ class Worker:
         }
     
     def _find_government_aid(self, plan: dict) -> dict:
+        # Extract disaster type from context if available
+        user_input = plan.get('user_input', '').lower()
+        disaster_type = 'general'
+        
+        disaster_keywords = {
+            "hurricane": ["hurricane", "storm", "flood"],
+            "earthquake": ["earthquake", "tremor"],
+            "wildfire": ["fire", "wildfire"],
+            "tornado": ["tornado", "twister"]
+        }
+        
+        for dtype, keywords in disaster_keywords.items():
+            if any(kw in user_input for kw in keywords):
+                disaster_type = dtype
+                break
+        
         return {
             "resource_type": "government",
-            "results": self.tools.get_disaster_aid_instructions(),
+            "results": self.tools.get_disaster_aid_instructions(disaster_type),
             "confidence": 0.95,
             "timestamp": plan.get('timestamp')
         }
