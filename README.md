@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Disaster Resource Connector 🆘
 
 An AI-powered agent that helps people find essential resources during disaster situations, including shelter, food, medical aid, and government assistance.
